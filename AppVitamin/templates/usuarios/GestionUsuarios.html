@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Vitamin Life - Gestión de Usuarios</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #f7f7f7;">
+        <div class="container px-4 px-lg-5">
+            <img src="{% static 'images/logo.png' %}" alt="Logo" id="logo">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 d-flex align-items-center">
+                    <a class="nav-link" href="{% url 'listar_productos' %}">Productos</a>
+                    <a class="nav-link" href="{% url 'gestion_usuarios' %}">Usuarios</a>
+                    <a class="nav-link" href="{% url 'listar_ventas' %}">Ventas</a>
+                    <a class="nav-link" href="{% url 'listar_envios' %}">Métodos de Envío</a>
+                </ul>
+                <!-- Contenedor del nombre y la imagen de perfil alineados -->
+                <div class="d-flex align-items-center ms-auto">
+                    <span class="me-2">{{ usuario.nombre }} {{ usuario.primer_apellido }}</span>
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% static 'images/LogoPerfil.png' %}" alt="Perfil" style="width: 35px; height: 35px;">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'perfil_administrador' %}">Mi perfil</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" href="{% url 'iniciar_sesion' %}">Cerrar sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header-->
+    <header style="background-color: #10402E;" class="py-2">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="fw-bolder">Gestión de Usuarios</h1>
+                <p class="lead fw-normal mb-0">Administración de usuarios de la plataforma</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section - Gestión de Usuarios-->
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <!-- Línea con el título y el botón alineado a la derecha -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="mb-0">Lista de Usuarios</h3>
+                <a href="{% url 'registrar_usuario_admin' %}" class="btn" style="background-color: #BFAE7A; color: black;">Crear Usuario</a>
+            </div>
+            <!-- Tabla de usuarios -->
+            <table class="table table-bordered">
+                <thead style="background-color: #D5DCF2;">
+                    <tr>
+                        <th>Nombre Completo</th>
+                        <th>Email</th>
+                        <th>RUT</th>
+                        <th>Perfil</th>
+                        <th>Estado</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.nombre }} {{ usuario.primer_apellido }} {{ usuario.segundo_apellido }}</td>
+                        <td>{{ usuario.correo }}</td>
+                        <td>{{ usuario.rut }}</td>
+                        <td>{{ usuario.perfil.nombre }}</td> <!-- Muestra el perfil actual del usuario -->
+                        <td>{% if usuario.cuenta_suspendida %} Suspendida {% else %} Activo {% endif %}</td>
+                        <td class="text-center">
+                            <!-- Empiezan los botones -->
+                            <a href="{% url 'editar_usuario_desde_admin' usuario.usuario_id %}" class="btn" style="background-color: #BFAE7A; color: black;">Editar</a>
+                            <a href="{% url 'toggle_estado_usuario' usuario.usuario_id %}" class="btn" style="background-color: #BFAE7A; color: black;">
+                                {% if usuario.cuenta_suspendida %} Habilitar {% else %} Deshabilitar {% endif %}
+                            </a>
+                            <a href="{% url 'toggle_perfil_usuario' usuario.usuario_id %}" class="btn" style="background-color: #BFAE7A; color: black;">Cambiar Perfil</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">No hay usuarios registrados</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+                <!-- Botón para ver el historial de acciones -->
+        <div class="text-center mt-4">
+            <a href="{% url 'ver_acciones' %}" class="btn" style="background-color: #BFAE7A; color: black;">Ver Historial de Acciones</a>
+        </div>
+
+
+    </section>
+
+
+    
+
+    <!-- Footer-->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; VitaminLife</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="{% static 'js/scripts.js' %}"></script>
+</body>
+
+</html>
+
+
+
+
+
+

@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Editar Método de Envío" />
+    <meta name="author" content="" />
+    <title>Vitamin Life - Editar Método de Envío</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #f7f7f7;">
+        <div class="container px-4 px-lg-5">
+            <img src="{% static 'images/logo.png' %}" alt="Logo" id="logo">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 d-flex align-items-center">
+                    <a class="nav-link" href="{% url 'listar_productos' %}">Productos</a>
+                    <a class="nav-link" href="{% url 'gestion_usuarios' %}">Usuarios</a>
+                    <a class="nav-link" href="{% url 'listar_ventas' %}">Ventas</a>
+                    <a class="nav-link" href="{% url 'listar_envios' %}">Métodos de Envío</a>
+                </ul>
+                <div class="d-flex align-items-center ms-auto">
+                    <span class="me-2">{{ usuario.nombre }} {{ usuario.primer_apellido }}</span>
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% static 'images/LogoPerfil.png' %}" alt="Perfil" style="width: 35px; height: 35px;">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'perfil_administrador' %}">Mi perfil</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" href="{% url 'iniciar_sesion' %}">Cerrar sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <!-- Header-->
+    <header style="background-color: #10402E;" class="py-2">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="fw-bolder">Historial de acciones</h1>
+                <p class="lead fw-normal mb-0">Listado de todas las acciones realizadas por los usuarios de la pagina</p>
+            </div>
+        </div>
+    </header>
+
+    <section class="container my-5">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Usuario</th>
+                    <th>Acción</th>
+                    <th>Tabla</th>
+                    <th>ID del Registro</th>
+                    <th>Detalles</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for auditoria in auditoria_list %}
+                <tr>
+                    <td>{{ auditoria.fecha|date:"d/m/Y H:i:s" }}</td> <!-- Formato de fecha -->
+                    <td>{{ auditoria.usuario.nombre }} {{ auditoria.usuario.primer_apellido }} {{ auditoria.usuario.segundo_apellido }}</td> <!-- Muestra el nombre completo -->
+                    <td>{{ auditoria.accion }}</td>
+                    <td>{{ auditoria.tabla }}</td>
+                    <td>{{ auditoria.registro_id }}</td>
+                    <td>{{ auditoria.detalles }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center">No hay registros de auditoría.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+    
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; VitaminLife</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+
+

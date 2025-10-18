@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Carrito de Compras - Vitamin Life</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #f7f7f7;">
+        <div class="container px-4 px-lg-5">
+            <img src="{% static 'images/logo.png' %}" alt="" id="logo">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 d-flex align-items-center">
+                    <a class="nav-link" href="{% url 'productos_cliente' %}">Productos</a>
+                    <a class="nav-link" href="{% url 'historial_compra' %}">Mis Compras</a>
+                </ul>
+                <!-- Contenedor del nombre y la imagen de perfil alineados -->
+                <div class="d-flex align-items-center ms-auto">
+                    <span class="me-2">{{ usuario.nombre }} {{ usuario.primer_apellido }}</span>
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% static 'images/LogoPerfil.png' %}" alt="Perfil" style="width: 35px; height: 35px;">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'perfil_cliente' %}">Mi perfil</a></li>
+                            <li><a class="dropdown-item" href="{% url 'listar_metodo_pago' %}">Metodos de pago</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" href="{% url 'iniciar_sesion' %}">Cerrar sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 d-flex align-items-center">
+                    <li class="nav-item">
+                        <a class="btn btn-outline-dark ms-2" href="{% url 'ver_carrito' %}">
+                            <i class="bi-cart-fill me-1"></i>
+                            Carrito
+                            <span class="badge bg-dark text-light ms-1 rounded-pill">{{ total_productos }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header-->
+    <header style="background-color: #125924;" class="py-2">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="fw-bolder">Carrito de Compras</h1>
+                <p class="lead fw-normal mb-0">Revisa los articulos que has agregado a tu carrito</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Section - Detalle del Carrito-->
+    <section class="py-5"> 
+        <div class="container">
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Total</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in productos_carrito %}
+                    <tr>
+                        <td>
+                            <img 
+                                src="{% if item.producto.imagen_url %}{% static item.producto.imagen_url %}{% else %}{% static 'images/default_product.png' %}{% endif %}" 
+                                alt="{{ item.producto.nombre }}" 
+                                style="max-width: 100px; max-height: 100px;" 
+                            />
+                        </td>
+                        <td>{{ item.producto.nombre }}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <!-- Botón de disminuir cantidad -->
+                                <button class="btn btn-outline-secondary btn-sm" id="decrease-{{ item.producto.producto_id }}" onclick="updateQuantity({{ item.producto.producto_id }}, -1)" {% if item.cantidad == 1 %} style="display:none;" {% endif %}>
+                                    -
+                                </button>
+                        
+                                <!-- Mostrar cantidad -->
+                                <span id="quantity-{{ item.producto.producto_id }}" class="mx-2">{{ item.cantidad }}</span>
+                        
+                                <!-- Botón de aumentar cantidad -->
+                                <button class="btn btn-outline-secondary btn-sm" id="increase-{{ item.producto.producto_id }}" onclick="updateQuantity({{ item.producto.producto_id }}, 1)">
+                                    +
+                                </button>
+                            </div>
+                        </td>
+                        <td>${{ item.precio_unitario }}</td>
+                        <td id="total-producto-{{ item.producto.producto_id }}">${{ item.total_producto }}</td> <!-- Total para este producto -->
+                        <td>
+                            <form method="post" action="{% url 'eliminar_del_carrito' item.producto.producto_id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button class="btn" style="background-color: #BFAE7A; color: black;" type="submit">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="text-center">No hay productos en tu carrito.</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <td colspan="4" class="text-end">Total</td>
+                        <td id="total-carrito">${{ total }}</td> <!-- Total general del carrito -->
+                        <td></td>
+                    </tr>                    
+                </tbody>
+            </table>
+
+
+            <div class="text-center">
+                {% if productos_carrito %}
+                    <a href="{% url 'resumen_carrito' %}" class="btn" style="background-color: #BFAE7A; color: black;">Ir al Pago</a>
+                {% else %}
+                    <button class="btn" style="background-color: #BFAE7A; color: black;" disabled>No hay productos en el carrito</button>
+                {% endif %}
+            </div>
+        </div> 
+    </section>
+
+    <!-- Footer-->
+    <footer class="py-5 bg-dark">
+        <div class="container"><p class="m-0 text-center text-white">Copyright &copy; VitaminLife</p></div>
+    </footer>
+    
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="{% static 'js/scripts.js' %}"></script>
+
+    <script>
+        function updateQuantity(productId, change) {
+            // Obtener la cantidad actual
+            const quantityElement = document.getElementById('quantity-' + productId);
+            let currentQuantity = parseInt(quantityElement.innerText);
+
+            // Calcular nueva cantidad
+            let newQuantity = currentQuantity + change;
+            if (newQuantity < 1) return; // Evitar cantidades negativas
+
+            // Actualizar la cantidad en el frontend
+            quantityElement.innerText = newQuantity;
+
+            // Actualizar los botones de incremento/decremento
+            if (newQuantity === 1) {
+                document.getElementById('decrease-' + productId).style.display = 'none';
+            } else {
+                document.getElementById('decrease-' + productId).style.display = 'inline-block';
+            }
+
+            // Hacer la petición al servidor para actualizar la cantidad
+            fetch(`/actualizar_cantidad/${productId}/${newQuantity}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Actualizar el precio total del producto
+                    const totalProductoElement = document.getElementById('total-producto-' + productId);
+                    totalProductoElement.innerText = '$' + data.total_producto.toFixed(2);
+
+                    // Actualizar el total del carrito
+                    const totalCarritoElement = document.getElementById('total-carrito');
+                    totalCarritoElement.innerText = '$' + data.total_carrito.toFixed(2);
+                } else {
+                    alert('Error al actualizar la cantidad');
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

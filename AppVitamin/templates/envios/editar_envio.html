@@ -1,0 +1,119 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Editar Método de Envío" />
+    <meta name="author" content="" />
+    <title>Vitamin Life - Editar Método de Envío</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #f7f7f7;">
+        <div class="container px-4 px-lg-5">
+            <img src="{% static 'images/logo.png' %}" alt="Logo" id="logo">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 d-flex align-items-center">
+                    <a class="nav-link" href="{% url 'listar_productos' %}">Productos</a>
+                    <a class="nav-link" href="{% url 'gestion_usuarios' %}">Usuarios</a>
+                    <a class="nav-link" href="{% url 'listar_ventas' %}">Ventas</a>
+                    <a class="nav-link" href="{% url 'listar_envios' %}">Métodos de Envío</a>
+                </ul>
+                <div class="d-flex align-items-center ms-auto">
+                    <span class="me-2">{{ usuario.nombre }} {{ usuario.primer_apellido }}</span>
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% static 'images/LogoPerfil.png' %}" alt="Perfil" style="width: 35px; height: 35px;">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'perfil_administrador' %}">Mi perfil</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" href="{% url 'iniciar_sesion' %}">Cerrar sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <!-- Header-->
+    <header style="background-color: #10402E;" class="py-2">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="fw-bolder">Editar Método de Envío</h1>
+                <p class="lead fw-normal mb-0">Modifique la información del método seleccionado</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Bloque para mostrar mensajes -->
+    <div class="container mt-3">
+        {% if messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {% for message in messages %}
+                    {{ message }}
+                {% endfor %}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Formulario -->
+    <section class="py-3">
+        <div class="container px-4 px-lg-5 mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <h2></h2>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="nombre" class="form-label"><strong>Nombre</strong></label>
+                            <input type="text" name="nombre" class="form-control" id="nombre" value="{{ envio.nombre }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="costo" class="form-label"><strong>Costo</strong></label>
+                            <input type="number" name="costo" class="form-control" id="costo" value="{{ envio.costo }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tiempo_estimado" class="form-label"><strong>Tiempo Estimado</strong></label>
+                            <input type="text" name="tiempo_estimado" class="form-control" id="tiempo_estimado" value="{{ envio.tiempo_estimado }}" required>
+                        </div>
+                        <div class="d-flex justify-content-start gap-2">
+                            <button type="submit" class="btn" style="background-color: #BFAE7A; color: black;">Guardar</button>
+                            <a href="{% url 'listar_envios' %}" class="btn" style="background-color: #BFAE7A; color: black;">Volver</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; VitaminLife</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
+
+

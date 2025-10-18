@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Perfil de cliente - Vitamin Life</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+</head>
+<body>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light align-items-center" style="background-color: #f7f7f7;">
+        <div class="container px-4 px-lg-5">
+            <img src="{% static 'images/logo.png' %}" alt="" id="logo">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 d-flex align-items-center">
+                    <a class="nav-link" href="{% url 'productos_cliente' %}">Productos</a>
+                    <a class="nav-link" href="{% url 'historial_compra' %}">Mis Compras</a>
+                </ul>
+                <!-- Contenedor del nombre y la imagen de perfil alineados -->
+                <div class="d-flex align-items-center ms-auto">
+                    <span class="me-2">{{ usuario.nombre }} {{ usuario.primer_apellido }}</span>
+                    <div class="dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="{% static 'images/LogoPerfil.png' %}" alt="Perfil" style="width: 35px; height: 35px;">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="{% url 'perfil_cliente' %}">Mi perfil</a></li>
+                            <li><a class="dropdown-item" href="{% url 'listar_metodo_pago' %}">Metodos de pago</a></li>
+                            <li><hr class="dropdown-divider" /></li>
+                            <li><a class="dropdown-item" href="{% url 'iniciar_sesion' %}">Cerrar sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 d-flex align-items-center">
+                    <li class="nav-item">
+                        <a class="btn btn-outline-dark ms-2" href="{% url 'ver_carrito' %}">
+                            <i class="bi-cart-fill me-1"></i>
+                            Carrito
+                            <span class="badge bg-dark text-light ms-1 rounded-pill">{{ total_productos }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header-->
+    <header style="background-color: #125924;" class="py-2">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1>Resumen de tu Compra</h1>
+            </div>
+        </div>
+    </header>
+
+<body>
+    <section class="py-5"> 
+        <div class="container">
+
+            <p><strong>Fecha de Venta:</strong> {{ venta.fecha }}</p>
+            <p><strong>Usuario:</strong> {{ venta.usuario.nombre }} {{ venta.usuario.primer_apellido }}</p>
+            <p><strong>Total:</strong> ${{ venta.total }}</p>
+            <p><strong>Estado:</strong> {{ venta.estado.nombre_estado }}</p>
+
+            <h4>Detalles de Productos</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nombre del Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for detalle in detalles %}
+                    <tr>
+                        <td>{{ detalle.producto.nombre }}</td>
+                        <td>{{ detalle.cantidad }}</td>
+                        <td>${{ detalle.precio_unitario }}</td>
+                        <td>${{ detalle.total }}</td>  {# Usa el total calculado en la vista #}
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No hay productos en esta venta.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="text-center">
+                <a href="{% url 'detalle_compra_cliente' venta.venta_id %}" class="btn" style="background-color: #BFAE7A; color: black;"">Ver detalle de tu compra</a>
+            </div>
+        </div> 
+    </section>
+
+    <footer class="py-5 bg-dark">
+        <div class="container"><p class="m-0 text-center text-white">Copyright &copy; VitaminLife</p></div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

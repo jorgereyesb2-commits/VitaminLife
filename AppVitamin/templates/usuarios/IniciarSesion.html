@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Vitamin Life - Iniciar Sesión</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+</head>
+<body>
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #f7f7f7;">
+        <div class="container px-4 px-lg-5">
+            <img src="{% static 'images/logo.png' %}" alt="Vitamin Life Logo" id="logo">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 d-flex align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'productos_inicio' %}">Productos</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header-->
+    <header style="background-color: #10402E;" class="py-2">
+        <div class="container px-4 px-lg-5 my-5">
+            <div class="text-center text-white">
+                <h1 class="fw-bolder">Iniciar Sesion</h1>
+                <p class="lead fw-normal mb-0">Bienvenido a VitaminLife</p>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Bootstrap Modal para mensajes de error o exito -->
+    <div class="modal fade" id="modalAlerta" tabindex="-1" aria-labelledby="modalAlertaLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalAlertaLabel">
+                        {% if mensaje_exito %}
+                        ¡Inicio Exitoso!
+                        {% else %}
+                        Errores de Validación
+                        {% endif %}
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    {% if mensaje_exito %}
+                        <p>{{ mensaje_exito }}</p>
+                    {% else %}
+                        <ul>
+                            {% for error in errores %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section-->
+    <section class="py-5"> 
+        <div class="container fs-5">
+            <div class="row justify-content-center">
+                <div class="col-md-5">
+                    <div class="forms-inputs mb-4 text-center">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="mb-4">
+                                <label for="rut" class="form-label"><strong>RUT</strong></label>
+                                <input class="form-control" type="text" id="rut" name="rut" placeholder="Ingrese su RUT..." required>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="password" class="form-label"><strong>Contraseña</strong></label>
+                                <input class="form-control" type="password" id="password" name="password" placeholder="Ingrese su contraseña..." required>
+                            </div>
+                            
+                            <div class="mb-3 text-center">
+                                <button class="btn" style="background-color: #BFAE7A; color: black;" type="submit">INGRESAR</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="text-center">
+                        <button class="btn" style="background-color: #BFAE7A; color: black;" onclick="window.location.href='{% url 'registrar_usuario' %}'">REGISTRARSE</button>
+                    </div>
+                </div>
+            </div> 
+        </div> 
+    </section>
+    
+
+    <!-- Footer-->
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; VitaminLife</p>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Trigger modal si hay mensajes de error o exito -->
+    {% if errores or mensaje_exito %}
+    <script>
+        var modal = new bootstrap.Modal(document.getElementById('modalAlerta'));
+        modal.show();
+    </script>
+    {% endif %}
+</body>
+</html>
+
