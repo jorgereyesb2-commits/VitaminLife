@@ -1,0 +1,77 @@
+INSERT INTO perfil (nombre) VALUES ('ADMINISTRADOR'), ('CLIENTE');
+
+
+INSERT INTO usuario (rut, nombre, primer_apellido, segundo_apellido, correo, telefono, contrasena, direccion_envio, perfil_id, intentos_inicio_sesion, cuenta_suspendida)
+VALUES 
+('11111111-1', 'JUAN', 'PEREZ', 'GONZALEZ', 'juan.perez@vitaminlife.cl', '56912345678', '111', 'CALLE 1 CASA 1 RANCAGUA', 1, 0, 0),
+('22222222-2', 'MARIA', 'LOPEZ', 'MARTINEZ', 'maria.lopez@gmail.com', '56987654321', '222', 'CALLE 2 CASA 22 RANCAGUA', 2, 0, 0),
+('33333333-3', 'CARLOS', 'RODRIGUEZ', 'DIAZ', 'carlos.rodriguez@gmail.com', '56954321987', '333', 'CALLE NORTE CASA 23 SANTIAGO', 2, 0, 0),
+('44444444-4', 'ANA', 'HERNANDEZ', 'SANCHEZ', 'ana.hernandez@outlook.com', '56921987654', '444', 'PASAJE 5 CASA 54 REQUINOA', 2, 0, 0);
+
+
+INSERT INTO producto (sku, nombre, descripcion, categoria, informacion_nutricional, dosificacion, contenido_envase, precio, imagen_url, habilitado)
+VALUES 
+('SKU001', 'Biotine Plus', 'Suplemento para el cuidado del cabello, piel y uñas.', 'Vitaminas y Minerales', 'Contiene Vitamina A, C, D y E.  Enriquecido con Vitaminas B5, B6, B9, B12 y Zinc', '2 capsulas diarias', 'Envase 60 cápsulas', 10000, 'images/biotinePlus.jpg', True),
+('SKU002', 'Creatine Monohydrate', 'Alimento para deportistas con creatina. Fuente de energía muscular', 'Entrenamiento', 'Contiene monohidrato de creatina micronizada, ', '5g en 120ml de agua una vez al día', 'Envase 300g', 15000, 'images/creatine.jpeg', True),
+('SKU003', 'Immune Plus Multivitaminico', 'Suplemento alimentario combina vitaminas, minerales, glutamina y sauco.', 'Vitaminas y Minerales', 'Contiene Vitamina C, glutamina, zinc, sauco, hierro, cobre, dióxido de silicio', '1 cápsula al día', 'Envase 60 cápsulas', 12000, 'images/glutamina.jpeg', True),
+('SKU004', 'Probiotic Gummies', 'Suplemento nutricional con sabor a berries', 'Vitaminas y Minerales', 'Contiene UFC de bacillus coagulans BC01 de componente activo', '1 gomita al día', 'Envase 60 gomitas', 20000, 'images/probiotic.jpg', True),
+('SKU005', 'Beef Protein', 'Suplemento para complementar dietas con sabor a chocolate', 'Entrenamiento', 'Contiene vitaminas, minerales y proteínas esenciales para el funcionamiento del organismo', '40g. al día', 'Envase 900g', 30000, 'images/proteinaCarne.jpeg', True),
+('SKU006', 'Collagen y Protein Bar', 'Suplemento alimentario en formato barra', 'Vitaminas y Minerales', 'Contiene proteína, colágeno, óxido de zinc, vitaminas C, D y E', '1 barrita al día', 'Envase 5 barritas', 10000, 'images/barraColagenoProteina.jpeg', True);
+
+
+INSERT INTO estado_pedido (nombre_estado)
+VALUES 
+('Pendiente'),
+('Enviado'),
+('Entregado'),
+('Cancelado');
+
+
+INSERT INTO metodo_envio (nombre, costo, tiempo_estimado, habilitado)
+VALUES 
+('Normal', 2000, '3-5 días', 1),
+('Expreso', 5000, '1-2 días', 1),
+('Internacional', 10000, '7-10 días', 1);
+
+
+INSERT INTO venta (usuario_id, fecha, total, estado_id)
+VALUES 
+(4, '2024-11-01', 25000, 1),
+(2, '2024-11-02', 45000, 2),
+(3, '2024-11-03', 22000, 3),
+(2, '2024-11-12', 50000, 3),
+(3, '2024-11-10', 30000, 3),
+(4, '2024-11-09', 30000, 3);
+
+
+INSERT INTO detalle_venta (venta_id, producto_id, cantidad, precio_unitario)
+VALUES 
+(1, 1, 2, 10000),
+(1, 3, 1, 12000),
+(2, 2, 3, 15000),
+(3, 1, 1, 10000),
+(3, 3, 1, 12000),
+(4, 4, 1, 20000),
+(4, 5, 1, 30000),
+(5, 1, 1, 10000),
+(5, 6, 2, 10000),
+(6, 5, 1, 30000);
+
+
+INSERT INTO estado_carrito (estado_carrito_id, nombre_estado) VALUES
+(1, 'ACTIVO'),
+(2, 'PENDIENTE'),
+(3, 'COMPLETADO'),
+(4, 'CANCELADO');
+
+
+INSERT INTO metodo_pago (usuario_id, nombre, tipo_tarjeta, numero_tarjeta, fecha_expiracion, cvv, habilitado)
+VALUES
+(2, 'Tarjeta Principal', 'Visa', '4111111111111111', '2025-08', '123', TRUE),
+(2, 'Tarjeta Secundaria', 'MasterCard', '5500000000000004', '2026-12', '456', TRUE),
+(2, 'Amex Preferida', 'Amex', '340000000000009', '2024-06', '789', TRUE),
+(3, 'Discover Corporate', 'Discover', '6011000000000004', '2027-03', '101', TRUE),
+(3, 'Otra Tarjeta', 'Otro', '1234567812345678', '2025-05', '202', FALSE);
+
+
+
